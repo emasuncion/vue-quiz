@@ -1,4 +1,4 @@
-import firebase from '@firebase'
+import firebase from '@/firebase'
 import { SET_PROFILE, LOGOUT } from './mutations'
 
 const state = {
@@ -18,8 +18,7 @@ const mutations = {
       name: profile.displayName,
       picture: profile.photoURL
     }
-  }
-
+  },
   [LOGOUT](state) {
     state.loggedIn = false
     state.profile = {}
@@ -28,7 +27,7 @@ const mutations = {
 
 const actions = {
   async login(store) {
-    // if user is already logged in return
+    // if user is already logged in, return
     if (store.state.loggedIn)
       return
 
@@ -39,7 +38,6 @@ const actions = {
     } catch(error) {
       console.log('There was an error: ' + error)
     }
-
   },
   async logout() {
     try {

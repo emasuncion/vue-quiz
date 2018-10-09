@@ -38,7 +38,6 @@
       totalPoints() {
         return this.quiz.questions.reduce((curr, question) =>
           parseInt(question.points) + curr, 0);
-        // we used parseInt because the value coming from the input is a string.
       }
     },
     methods: {

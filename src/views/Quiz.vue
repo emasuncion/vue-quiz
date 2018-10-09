@@ -56,15 +56,18 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
+
   export default {
     name: 'quiz',
     created() {
-      this.getQuiz(this.$route.params.id);
+      this.getQuiz(this.$route.params.id)
     },
     computed: {
-      ...mapGetters('quiz', {quiz: 'quiz'}),
+      ...mapGetters('quiz',{
+        quiz: 'quiz'
+      }),
       totalScore() {
-        return this.quiz.questions.reduce((curr, question)   => {
+        return this.quiz.questions.reduce((curr, question) => {
           return curr + question.points
         }, 0)
       }
@@ -74,7 +77,9 @@
         getQuiz: 'get'
       }),
       next() {
-        if (this.stepAnswer == null) return
+        if (this.stepAnswer == null){
+          return
+        }
         const question = this.quiz.questions[this.step - 1]
         const answer = question.answers[this.stepAnswer]
         if (answer.isRight) {
@@ -86,12 +91,12 @@
             chosenAnswer: answer.answer
           })
         }
-        // check if the quiz is done
+
         if (this.step < this.quiz.questions.length) {
           this.step++
           this.stepAnswer = null
         } else {
-          console.log('here')
+          console.log('Done')
           this.done = true
         }
       }

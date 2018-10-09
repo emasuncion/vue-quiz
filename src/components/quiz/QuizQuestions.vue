@@ -1,3 +1,4 @@
+
 <template>
   <v-container>
     <v-layout wrap>
@@ -45,6 +46,7 @@
                       <v-text-field
                         label="Answer"
                         :value="answer.answer"
+                        @input="updateAnswerText($event, questionIndex, answerIndex)"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs2>
@@ -53,7 +55,8 @@
                         dark
                         small
                         color="red"
-                        @click="removeAnswer({questionIndex, answerIndex})">
+                        @click="removeAnswer({questionIndex, answerIndex})"
+                      >
                         <v-icon>remove</v-icon>
                       </v-btn>
                     </v-flex>

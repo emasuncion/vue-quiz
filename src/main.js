@@ -6,8 +6,11 @@ import router from './router'
 import store from './store.js'
 import './auth'
 import './registerServiceWorker'
+import dotenv from 'dotenv'
 
 Vue.config.productionTip = false
+
+dotenv.config()
 
 new Vue({
   router,

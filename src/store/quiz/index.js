@@ -25,6 +25,7 @@ const state = {
         points: 0,
         answers: [
           {
+            isRight: false,
             answer: "Answer"
           }
         ]
@@ -120,17 +121,31 @@ const actions = {
   async create({state}) {
     const user = firebase.auth().currentUser
     if (user) {
-      // check if there is a question without a right answer
-      state.newQuiz.questions.map(question => {
+      const quiz = state.newQuiz
+
+      if (!quiz.title || !quiz.description) {
+        throw new Error('Quiz information is required!')
+      }
+
+      if (quiz.questions.length === 0) {
+        throw new Error('Quiz is empty!')
+      }
+
+      quiz.questions.map(question => {
+        if (question.answers.length === 0) {
+          throw new Error(`Question ${question.question} doesn't have answers!`)
+        }
+
         let hasRightAnswer = false
 
         question.answers.map(answer => {
-          if (answer.isRight) hasRightAnswer = true
+          if (answer.isRight) {
+            hasRightAnswer = true
+          }
         })
 
         if (!hasRightAnswer) {
-          alert(`Question: '${question.question}' doesn't have a right answer!`)
-          throw new Error()
+          throw new Error(`Question: '${question.question}' doesn't have a right answer selected!`)
         }
       })
 
@@ -148,7 +163,7 @@ const actions = {
     commit(RESET_QUIZ_LIST)
 
     db.collection('quizes').onSnapshot(snapshot => {
-      snapshot.docChanges().forEach(function(change) {
+      snapshot.docChanges().forEach(change => {
         if (change.type === "added") {
           commit(PUSH_QUIZ, {
             id: change.doc.id,
@@ -159,13 +174,15 @@ const actions = {
     })
   },
   async get({commit}, id) {
-    const quiz = db.collection('quizes').doc('id').get()
+    const quiz = await db.collection('quizes').doc(id).get()
 
     if (quiz.exists) {
       commit(SET_QUIZ, {
         id: quiz.id,
       ...quiz.data()
       })
+    } else {
+      console.log('No quiz')
     }
   }
 }

@@ -3,6 +3,7 @@ pipeline {
     docker {
       image 'node'
     }
+
   }
   stages {
     stage('Information') {
